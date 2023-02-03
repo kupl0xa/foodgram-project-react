@@ -53,6 +53,9 @@ class Base64ImageField(serializers.ImageField):
 
         return super().to_internal_value(data)
 
+    def to_representation(self, value):
+        return value.url
+
 
 class RecipeSerializer(serializers.ModelSerializer):
     """Сериализатор рецептов"""
@@ -110,8 +113,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
-        print(validated_data)
-        instance.image = validated_data.get('image')
+        if 'image' in validated_data:
+            instance.image = validated_data.get('image')
         instance.name = validated_data.get('name')
         instance.text = validated_data.get('text')
         instance.cooking_time = validated_data.get('cooking_time')
@@ -146,7 +149,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class MiniRecipeSerializer(serializers.ModelSerializer):
-    image = Base64ImageField()
+    # image = Base64ImageField()
 
     class Meta:
         model = Recipe
@@ -170,11 +173,13 @@ class FollowSerializer(serializers.ModelSerializer):
             'is_subscribed', 'recipes', 'recipes_count'
         )
 
-    def get_is_subscribed(self, obj):
+    @staticmethod
+    def get_is_subscribed(obj):
         return Follow.objects.filter(user=obj.user,
                                      following=obj.following).exists()
 
-    def get_recipes_count(self, obj):
+    @staticmethod
+    def get_recipes_count(obj):
         return Recipe.objects.filter(author=obj.following).count()
 
     def get_recipes(self, obj):
