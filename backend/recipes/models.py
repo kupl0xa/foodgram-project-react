@@ -34,6 +34,20 @@ class Ingredient(models.Model):
         return self.name
 
 
+class RecipeQuerySet(models.QuerySet):
+    def favorite(self, user, id=None):
+        if id:
+            return self.filter(favorites__user=user, id=id)
+        else:
+            return self.filter(favorites__user=user)
+
+    def cart(self, user, id=None):
+        if id:
+            return self.filter(cart__user=user, id=id)
+        else:
+            return self.filter(cart__user=user)
+
+
 class Recipe(models.Model):
     """Модель для рецептов"""
     author = models.ForeignKey(
@@ -55,6 +69,8 @@ class Recipe(models.Model):
     )
     tags = models.ManyToManyField(Tag, blank=False)
     cooking_time = models.IntegerField()
+
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Рецепт'

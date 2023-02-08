@@ -103,12 +103,16 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(**validated_data)
 
-        for ingredient in ingredients:
-            IngredientRecipe.objects.create(
+        ingredients_list = [
+            IngredientRecipe(
                 ingredient_id=ingredient['id'],
                 recipe=recipe,
                 amount=ingredient['amount']
             )
+            for ingredient in ingredients
+        ]
+        IngredientRecipe.objects.bulk_create(ingredients_list)
+
         recipe.tags.set(tags)
         return recipe
 
@@ -125,12 +129,15 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         IngredientRecipe.objects.filter(recipe=instance).all().delete()
         ingredients = validated_data['ingredients']
-        for ingredient in ingredients:
-            IngredientRecipe.objects.create(
+        ingredients_list = [
+            IngredientRecipe(
                 ingredient_id=ingredient['id'],
                 recipe=instance,
                 amount=ingredient['amount']
             )
+            for ingredient in ingredients
+        ]
+        IngredientRecipe.objects.bulk_create(ingredients_list)
 
         instance.save()
         return instance
@@ -139,13 +146,13 @@ class RecipeSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return Recipe.objects.filter(favorites__user=user, id=obj.id).exists()
+        return Recipe.objects.favorite(user, obj.id).exists()
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
+        return Recipe.objects.cart(user, obj.id).exists()
 
 
 class MiniRecipeSerializer(serializers.ModelSerializer):
