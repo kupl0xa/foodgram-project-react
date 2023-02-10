@@ -38,14 +38,12 @@ class RecipeQuerySet(models.QuerySet):
     def favorite(self, user, id=None):
         if id:
             return self.filter(favorites__user=user, id=id)
-        else:
-            return self.filter(favorites__user=user)
+        return self.filter(favorites__user=user)
 
     def cart(self, user, id=None):
         if id:
             return self.filter(cart__user=user, id=id)
-        else:
-            return self.filter(cart__user=user)
+        return self.filter(cart__user=user)
 
 
 class Recipe(models.Model):
