@@ -1,4 +1,4 @@
-name: Foodgram backend workflow
+name: Foodgram backend workflows
 
 on: [push]
 
