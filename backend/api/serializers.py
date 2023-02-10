@@ -1,7 +1,7 @@
 import base64
 
 from django.core.files.base import ContentFile
-from recipes.models import IngredientRecipe, Ingredient, Recipe, Tag
+from recipes.models import Ingredient, IngredientRecipe, Recipe, Tag
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from users.models import Follow
