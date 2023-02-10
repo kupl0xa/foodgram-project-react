@@ -117,14 +117,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 }
             else:
                 buy_list[ingredient[0]]['amount'] += ingredient[2]
-        
+
         pdfmetrics.registerFont(
             TTFont(
                 'DejaVuSerif',
-                os.path.dirname(os.path.abspath(__file__))+'/DejaVuSerif.ttf',
+                os.path.dirname(os.path.abspath(__file__))
+                + '/DejaVuSerif.ttf',
                 'UTF-8'
-                )
             )
+        )
         buffer = io.BytesIO()
         p = canvas.Canvas(buffer, bottomup=0)
         p.setFont('DejaVuSerif', 14)
@@ -139,7 +140,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 y=height,
                 text=f'{name} ({data["measurement_unit"]}) - {data["amount"]}'
             )
-            height += 15                 
+            height += 15
         p.showPage()
         p.save()
         buffer.seek(0)

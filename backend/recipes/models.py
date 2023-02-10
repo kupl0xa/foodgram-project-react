@@ -23,7 +23,7 @@ class Tag(models.Model):
 class Ingredient(models.Model):
     """Модель для ингредиентов"""
     name = models.CharField(max_length=150, blank=False)
-    measurement_unit = models.CharField(max_length=5, blank=False)
+    measurement_unit = models.CharField(max_length=15, blank=False)
 
     class Meta:
         verbose_name = 'Ингредиент'
@@ -88,10 +88,10 @@ class IngredientRecipe(models.Model):
     amount = models.PositiveIntegerField(
         validators=[
             MinValueValidator(
-                limit_value=1, 
+                limit_value=1,
                 message='Количество должно быть больше нуля'
             )]
-        )
+    )
 
     class Meta:
         ordering = ['id']

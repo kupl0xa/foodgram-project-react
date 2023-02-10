@@ -5,8 +5,8 @@ from rest_framework.filters import SearchFilter
 
 class RecipeFilter(filters.FilterSet):
     tags = filters.AllValuesMultipleFilter(
-        field_name='tags__slug', lookup_expr='exact'
-        )
+        field_name='tags__slug', lookup_expr='contains'
+    )
     is_favorited = filters.BooleanFilter(method='filter_is_favorited')
     is_in_shopping_cart = filters.BooleanFilter(
         method='filter_is_in_shopping_cart')

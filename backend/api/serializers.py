@@ -65,7 +65,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         source='ingredientrecipe_set',
         read_only=True,
         many=True
-        )
+    )
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
     image = Base64ImageField()
@@ -87,13 +87,13 @@ class RecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'Нужно добавить хотя бы 1 ингредиент'
             )
-                
+
         for value in (tags, ingredients):
             if not isinstance(value, list):
                 raise serializers.ValidationError(
                     f'{value} должен быть в формате list'
                 )
-        
+
         data['tags'] = tags
         data['ingredients'] = ingredients
         return data
