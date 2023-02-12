@@ -65,7 +65,13 @@ class Recipe(models.Model):
         blank=False
     )
     tags = models.ManyToManyField(Tag, blank=False)
-    cooking_time = models.IntegerField()
+    cooking_time = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(
+                limit_value=1,
+                message='Время должно быть больше нуля'
+            )]
+    )
 
     objects = RecipeQuerySet.as_manager()
 
@@ -82,7 +88,7 @@ class IngredientRecipe(models.Model):
     """Модель для связи ингредиентов и рецептов"""
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField(
+    amount = models.PositiveSmallIntegerField(
         validators=[
             MinValueValidator(
                 limit_value=1,
@@ -98,6 +104,9 @@ class IngredientRecipe(models.Model):
                 name='unique_ingredient-recipe'
             )
         ]
+
+    def __str__(self):
+        return f'{self.ingredient} {self.amount} в {self.recipe}'
 
 
 class Favorite(models.Model):

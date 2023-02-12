@@ -93,6 +93,15 @@ class RecipeSerializer(serializers.ModelSerializer):
                     f'{value} должен быть в формате list'
                 )
 
+        for ingredient in ingredients:
+            if 10000 < ingredient['amount'] < 1:
+                raise serializers.ValidationError(
+                    'Количество ингредиента может быть от 1 до 10000'
+                )
+        if 1000 < self.initial_data['cooking_time'] < 1:
+            raise serializers.ValidationError(
+                'Время приготовление может быть от 1 до 1000'
+            )
         data['tags'] = tags
         data['ingredients'] = ingredients
         return data
