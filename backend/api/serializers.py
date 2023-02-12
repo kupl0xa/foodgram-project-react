@@ -94,11 +94,11 @@ class RecipeSerializer(serializers.ModelSerializer):
                 )
 
         for ingredient in ingredients:
-            if 10000 < ingredient['amount'] < 1:
+            if ingredient['amount'] not in (1, 10000):
                 raise serializers.ValidationError(
                     'Количество ингредиента может быть от 1 до 10000'
                 )
-        if 1000 < self.initial_data['cooking_time'] < 1:
+        if self.initial_data['cooking_time'] not in (1, 1000):
             raise serializers.ValidationError(
                 'Время приготовление может быть от 1 до 1000'
             )
