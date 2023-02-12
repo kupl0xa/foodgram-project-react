@@ -94,6 +94,10 @@ class RecipeSerializer(serializers.ModelSerializer):
                 )
 
         for ingredient in ingredients:
+            if not ingredient['amount'].isdecimal():
+                raise serializers.ValidationError(
+                    'Количество ингредиента должно быть числом'
+                )
             if not (1 <= int(ingredient['amount']) <= 10000):
                 raise serializers.ValidationError(
                     'Количество ингредиента может быть от 1 до 10000'
