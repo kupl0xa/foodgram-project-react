@@ -7,12 +7,16 @@ services:
     env_file:
       - ./.env
   frontend:
-    image: kupl0xa/foodgram-front:latest
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
   
   backend:
-    image: kupl0xa/foodgram-back:latest
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     volumes:
       - static_value:/app/static/django/
       - media_value:/app/media/
